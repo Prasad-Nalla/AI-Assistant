@@ -1,5 +1,6 @@
 const Document = require("../models/Document");
 
+// Upload PDF
 const uploadDocument = async (req, res) => {
   try {
     if (!req.file) {
@@ -21,7 +22,8 @@ const uploadDocument = async (req, res) => {
       document: newDoc,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -29,4 +31,28 @@ const uploadDocument = async (req, res) => {
   }
 };
 
-module.exports = { uploadDocument };
+// Get all documents of the logged-in user
+const getDocuments = async (req, res) => {
+  try {
+    const documents = await Document.find({
+      uploadedBy: req.user.id,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      documents,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+module.exports = {
+  uploadDocument,
+  getDocuments,
+};

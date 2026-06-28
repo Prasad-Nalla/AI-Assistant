@@ -1,5 +1,6 @@
 import Sidebar from "../components/dashboard/Sidebar";
 import Navbar from "../components/dashboard/Navbar";
+import UploadCard from "../components/dashboard/UploadCard";
 
 function Dashboard() {
   return (
@@ -10,7 +11,7 @@ function Dashboard() {
       <div className="flex-1 bg-gray-100 min-h-screen">
 
         <Navbar />
-
+    <UploadCard />
         <div className="p-8">
 
           <div className="bg-white rounded-xl shadow p-8">

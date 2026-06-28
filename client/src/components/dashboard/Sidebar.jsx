@@ -13,7 +13,7 @@ function Sidebar() {
 
       <div className="p-6 border-b border-slate-700">
         <h1 className="text-2xl font-bold">
-          AI Assistant
+          AI Document Assistant
         </h1>
 
         <p className="text-gray-400 text-sm mt-1">
