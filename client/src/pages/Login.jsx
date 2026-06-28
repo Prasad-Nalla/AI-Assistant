@@ -1,6 +1,8 @@
 import { useState } from "react";
-
+import {Link,useNavigate} from "react-router-dom";
+import API from "../services/api";
 function Login() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -13,10 +15,26 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await API.post("/auth/login", formData);
+
+    localStorage.setItem("token", response.data.token);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(response.data.user)
+    );
+
+    alert("Login Successful");
+
+    navigate("/dashboard");
+  } catch (error) {
+    alert(error.response?.data?.message || "Login Failed");
+  }
+};
 
   return (
     <div style={{ maxWidth: "400px", margin: "100px auto" }}>
