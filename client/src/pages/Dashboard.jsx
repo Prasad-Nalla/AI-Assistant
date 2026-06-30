@@ -1,7 +1,7 @@
 import Sidebar from "../components/dashboard/Sidebar";
 import Navbar from "../components/dashboard/Navbar";
 import UploadCard from "../components/dashboard/UploadCard";
-
+import RecentDocuments from "../components/dashboard/RecentDocuments";
 function Dashboard() {
   return (
     <div className="flex">
@@ -12,6 +12,7 @@ function Dashboard() {
 
         <Navbar />
     <UploadCard />
+    <RecentDocuments/>
         <div className="p-8">
 
           <div className="bg-white rounded-xl shadow p-8">
