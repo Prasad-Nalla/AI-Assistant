@@ -1,74 +1,104 @@
-import { Link } from "react-router-dom";
 import {
-  FaHome,
-  FaFileAlt,
-  FaUpload,
   FaRobot,
+  FaHome,
+  FaFilePdf,
+  FaCloudUploadAlt,
+  FaComments,
+  FaUser,
   FaSignOutAlt,
 } from "react-icons/fa";
 
 function Sidebar() {
   return (
-    <div className="w-64 h-screen bg-slate-900 text-white flex flex-col">
+    <aside className="w-72 bg-white/5 backdrop-blur-2xl border-r border-white/10 flex flex-col">
 
-      <div className="p-6 border-b border-slate-700">
-        <h1 className="text-2xl font-bold">
-          AI Document Assistant
-        </h1>
+      {/* Logo */}
+      <div className="h-24 flex items-center justify-center border-b border-white/10">
 
-        <p className="text-gray-400 text-sm mt-1">
-          Chat with your PDFs
-        </p>
+        <div className="flex items-center gap-3">
+
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-500 flex items-center justify-center">
+
+            <FaRobot className="text-white text-xl" />
+
+          </div>
+
+          <div>
+
+            <h2 className="text-white font-bold text-lg">
+              AI Assistant
+            </h2>
+
+            <p className="text-gray-400 text-sm">
+              Smart Workspace
+            </p>
+
+          </div>
+
+        </div>
+
       </div>
 
-      <nav className="flex-1 p-4">
+      {/* Menu */}
 
-        <Link
-          to="/dashboard"
-          className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"
-        >
-          <FaHome />
-          Dashboard
-        </Link>
+      <nav className="flex-1 mt-8 px-4">
 
-        <Link
-          to="/documents"
-          className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"
-        >
-          <FaFileAlt />
-          Documents
-        </Link>
+        <ul className="space-y-3">
 
-        <Link
-          to="/upload"
-          className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"
-        >
-          <FaUpload />
-          Upload PDF
-        </Link>
+          <li className="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl">
+            <button className="flex items-center gap-4 w-full px-5 py-4 text-white">
+              <FaHome />
+              Dashboard
+            </button>
+          </li>
 
-        <Link
-          to="/chat"
-          className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800"
-        >
-          <FaRobot />
-          AI Chat
-        </Link>
+          <li>
+            <button className="flex items-center gap-4 w-full px-5 py-4 rounded-xl text-gray-300 hover:bg-white/10 transition">
+              <FaFilePdf />
+              Documents
+            </button>
+          </li>
+
+          <li>
+            <button className="flex items-center gap-4 w-full px-5 py-4 rounded-xl text-gray-300 hover:bg-white/10 transition">
+              <FaCloudUploadAlt />
+              Upload
+            </button>
+          </li>
+
+          <li>
+            <button className="flex items-center gap-4 w-full px-5 py-4 rounded-xl text-gray-300 hover:bg-white/10 transition">
+              <FaComments />
+              AI Chat
+            </button>
+          </li>
+
+          <li>
+            <button className="flex items-center gap-4 w-full px-5 py-4 rounded-xl text-gray-300 hover:bg-white/10 transition">
+              <FaUser />
+              Profile
+            </button>
+          </li>
+
+        </ul>
 
       </nav>
 
-      <div className="p-4 border-t border-slate-700">
+      {/* Logout */}
 
-        <button
-          className="flex items-center gap-3 w-full p-3 rounded-lg bg-red-600 hover:bg-red-700"
-        >
+      <div className="p-4 border-t border-white/10">
+
+        <button className="flex items-center gap-4 w-full px-5 py-4 rounded-xl text-red-400 hover:bg-red-500/10 transition">
+
           <FaSignOutAlt />
+
           Logout
+
         </button>
 
       </div>
 
-    </div>
+    </aside>
   );
 }
 
