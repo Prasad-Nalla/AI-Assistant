@@ -1,17 +1,21 @@
 const express = require("express");
 const router = express.Router();
-
 const upload = require("../middleware/uploadMiddleware");
-const { uploadDocument,getDocuments } = require("../controllers/documentController");
 const protect = require("../middleware/authMiddleware");
 
-// upload PDF (protected route)
+const {
+  uploadDocument,
+  getDocuments,
+  deleteDocument,
+} = require("../controllers/documentController");
+
 router.post(
   "/upload",
   protect,
   upload.single("file"),
   uploadDocument
 );
-router.get("/", protect, getDocuments);
 
+router.get("/", protect, getDocuments);
+router.delete("/:id", protect, deleteDocument);
 module.exports = router;

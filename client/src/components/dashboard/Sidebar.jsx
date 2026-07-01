@@ -26,7 +26,7 @@ function Sidebar() {
           <div>
 
             <h2 className="text-white font-bold text-lg">
-              AI Assistant
+              AI Document Assistant
             </h2>
 
             <p className="text-gray-400 text-sm">
