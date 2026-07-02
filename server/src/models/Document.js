@@ -17,6 +17,18 @@ const documentSchema = new mongoose.Schema(
       required: true,
     },
 
+    // Extracted PDF text
+    text: {
+      type: String,
+      default: "",
+    },
+
+    // AI Summary
+    summary: {
+      type: String,
+      default: "",
+    },
+
     uploadedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

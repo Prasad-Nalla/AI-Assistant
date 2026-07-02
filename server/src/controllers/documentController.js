@@ -1,22 +1,37 @@
 const Document = require("../models/Document");
-const fs=require("fs");
-const path=require("path");
+const pdfParse = require("pdf-parse");
+const fs = require("fs");
+const path = require("path");
+
+const { generateSummary } = require("../services/geminiService");
+
+// =======================
 // Upload PDF
+// =======================
 const uploadDocument = async (req, res) => {
   try {
     if (!req.file) {
-      console.log("req.file =", req.file);
-
       return res.status(400).json({
         success: false,
         message: "No file uploaded",
       });
     }
-console.log("Saved path:", req.file.path);
+
+    // Read uploaded PDF
+    const dataBuffer = fs.readFileSync(req.file.path);
+
+    // Extract text
+    const pdfData = await pdfParse(dataBuffer);
+
+    // Limit text length for Gemini
+    const extractedText = (pdfData.text || "").substring(0, 30000);
+
+    // Save document
     const newDoc = await Document.create({
       title: req.file.originalname,
       fileName: req.file.filename,
       filePath: req.file.path,
+      text: extractedText,
       uploadedBy: req.user.id,
     });
 
@@ -25,6 +40,7 @@ console.log("Saved path:", req.file.path);
       message: "File uploaded successfully",
       document: newDoc,
     });
+
   } catch (error) {
     console.error("Upload Error:", error);
 
@@ -35,7 +51,9 @@ console.log("Saved path:", req.file.path);
   }
 };
 
-// Get all uploaded documents
+// =======================
+// Get Documents
+// =======================
 const getDocuments = async (req, res) => {
   try {
     const documents = await Document.find({
@@ -46,6 +64,7 @@ const getDocuments = async (req, res) => {
       success: true,
       documents,
     });
+
   } catch (error) {
     console.error("Get Documents Error:", error);
 
@@ -55,7 +74,10 @@ const getDocuments = async (req, res) => {
     });
   }
 };
+
+// =======================
 // Delete Document
+// =======================
 const deleteDocument = async (req, res) => {
   try {
     const document = await Document.findById(req.params.id);
@@ -67,7 +89,6 @@ const deleteDocument = async (req, res) => {
       });
     }
 
-    // Allow only owner to delete
     if (document.uploadedBy.toString() !== req.user.id) {
       return res.status(403).json({
         success: false,
@@ -75,7 +96,6 @@ const deleteDocument = async (req, res) => {
       });
     }
 
-    // Delete PDF from uploads folder
     const filePath = path.join(
       __dirname,
       "../../uploads",
@@ -86,15 +106,15 @@ const deleteDocument = async (req, res) => {
       fs.unlinkSync(filePath);
     }
 
-    // Delete from MongoDB
     await Document.findByIdAndDelete(req.params.id);
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Document deleted successfully",
     });
+
   } catch (error) {
-    console.error(error);
+    console.error("Delete Error:", error);
 
     res.status(500).json({
       success: false,
@@ -102,8 +122,71 @@ const deleteDocument = async (req, res) => {
     });
   }
 };
+
+// =======================
+// Generate AI Summary
+// =======================
+const generateDocumentSummary = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
+
+    if (!document) {
+      return res.status(404).json({
+        success: false,
+        message: "Document not found",
+      });
+    }
+
+    if (document.uploadedBy.toString() !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    // Return cached summary if available
+    if (document.summary && document.summary.trim() !== "") {
+      return res.status(200).json({
+        success: true,
+        summary: document.summary,
+        cached: true,
+      });
+    }
+
+    if (!document.text || document.text.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Document text not available.",
+      });
+    }
+
+    console.log("Generating summary using Gemini...");
+
+    const summary = await generateSummary(document.text);
+
+    document.summary = summary;
+
+    await document.save();
+
+    res.status(200).json({
+      success: true,
+      summary,
+      cached: false,
+    });
+
+  } catch (error) {
+    console.error("Summary Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadDocument,
   getDocuments,
   deleteDocument,
+  generateDocumentSummary,
 };

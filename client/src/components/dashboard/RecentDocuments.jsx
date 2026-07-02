@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import API from "../../services/api";
-
 import {
   FaFilePdf,
   FaEye,
   FaTrash,
   FaClock,
+  FaMagic,
 } from "react-icons/fa";
 
+import LoadingModal from "../ai/LoadingModal";
+import SummaryModal from "../ai/SummaryModal";
+
+import toast from "react-hot-toast";
 function RecentDocuments() {
   const [documents, setDocuments] = useState([]);
-
+  const [loadingSummary, setLoadingSummary] = useState(false);
+const [summaryOpen, setSummaryOpen] = useState(false);
+const [summary, setSummary] = useState("");
   useEffect(() => {
     fetchDocuments();
   }, []);
@@ -43,6 +49,30 @@ const handleDelete = async (id) => {
     console.error(error);
 
     alert("Delete failed");
+  }
+};
+const handleSummary = async (id) => {
+  try {
+    setLoadingSummary(true);
+
+    const res = await API.post(`/documents/${id}/summary`);
+
+    setSummary(res.data.summary);
+
+    setLoadingSummary(false);
+
+    setSummaryOpen(true);
+
+    toast.success("Summary Generated Successfully");
+
+  } catch (error) {
+
+    console.error(error);
+
+    setLoadingSummary(false);
+
+    toast.error("Failed to Generate Summary");
+
   }
 };
   return (
@@ -102,9 +132,9 @@ const handleDelete = async (id) => {
 
                 </div>
 
-                <div className="flex gap-3">
+              <div className="flex gap-3">
 
-                  <button
+<button
   onClick={() =>
     window.open(
       `http://localhost:5000/uploads/${doc.fileName}`,
@@ -116,14 +146,23 @@ const handleDelete = async (id) => {
   <FaEye />
 </button>
 
-                  <button
+<button
+  onClick={() => handleSummary(doc._id)}
+  className="px-4 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white flex items-center gap-2 transition-all"
+>
+  <FaMagic />
+
+  Summary
+</button>
+
+<button
   onClick={() => handleDelete(doc._id)}
   className="w-10 h-10 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center justify-center"
 >
   <FaTrash />
 </button>
 
-                </div>
+</div>
 
               </div>
 
@@ -132,7 +171,13 @@ const handleDelete = async (id) => {
 
         </div>
       )}
+<LoadingModal open={loadingSummary} />
 
+<SummaryModal
+    open={summaryOpen}
+    summary={summary}
+    onClose={() => setSummaryOpen(false)}
+/>
     </div>
   );
 }
