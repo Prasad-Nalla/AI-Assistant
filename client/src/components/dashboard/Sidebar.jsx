@@ -1,3 +1,4 @@
+import {NavLink} from "react-router-dom";
 import {
   FaRobot,
   FaHome,
@@ -45,41 +46,82 @@ function Sidebar() {
 
         <ul className="space-y-3">
 
-          <li className="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl">
-            <button className="flex items-center gap-4 w-full px-5 py-4 text-white">
-              <FaHome />
-              Dashboard
-            </button>
-          </li>
+         <li>
+  <NavLink
+    to="/dashboard"
+    className={({ isActive }) =>
+      `flex items-center gap-4 w-full px-5 py-4 rounded-xl transition ${
+        isActive
+          ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+          : "text-gray-300 hover:bg-white/10"
+      }`
+    }
+  >
+    <FaHome />
+    Dashboard
+  </NavLink>
+</li>
 
-          <li>
-            <button className="flex items-center gap-4 w-full px-5 py-4 rounded-xl text-gray-300 hover:bg-white/10 transition">
-              <FaFilePdf />
-              Documents
-            </button>
-          </li>
-
-          <li>
-            <button className="flex items-center gap-4 w-full px-5 py-4 rounded-xl text-gray-300 hover:bg-white/10 transition">
-              <FaCloudUploadAlt />
-              Upload
-            </button>
-          </li>
-
-          <li>
-            <button className="flex items-center gap-4 w-full px-5 py-4 rounded-xl text-gray-300 hover:bg-white/10 transition">
-              <FaComments />
-              AI Chat
-            </button>
-          </li>
-
-          <li>
-            <button className="flex items-center gap-4 w-full px-5 py-4 rounded-xl text-gray-300 hover:bg-white/10 transition">
-              <FaUser />
-              Profile
-            </button>
-          </li>
-
+         <li>
+  <NavLink
+    to="/documents"
+    className={({ isActive }) =>
+      `flex items-center gap-4 w-full px-5 py-4 rounded-xl transition ${
+        isActive
+          ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+          : "text-gray-300 hover:bg-white/10"
+      }`
+    }
+  >
+    <FaFilePdf />
+    Documents
+  </NavLink>
+</li>
+        <li>
+  <NavLink
+    to="/upload"
+    className={({ isActive }) =>
+      `flex items-center gap-4 w-full px-5 py-4 rounded-xl transition ${
+        isActive
+          ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+          : "text-gray-300 hover:bg-white/10"
+      }`
+    }
+  >
+    <FaCloudUploadAlt />
+    Upload
+  </NavLink>
+</li>
+         <li>
+  <NavLink
+    to="/chat"
+    className={({ isActive }) =>
+      `flex items-center gap-4 w-full px-5 py-4 rounded-xl transition ${
+        isActive
+          ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+          : "text-gray-300 hover:bg-white/10"
+      }`
+    }
+  >
+    <FaComments />
+    AI Chat
+  </NavLink>
+</li>
+        <li>
+  <NavLink
+    to="/profile"
+    className={({ isActive }) =>
+      `flex items-center gap-4 w-full px-5 py-4 rounded-xl transition ${
+        isActive
+          ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+          : "text-gray-300 hover:bg-white/10"
+      }`
+    }
+  >
+    <FaUser />
+    Profile
+  </NavLink>
+</li>
         </ul>
 
       </nav>
